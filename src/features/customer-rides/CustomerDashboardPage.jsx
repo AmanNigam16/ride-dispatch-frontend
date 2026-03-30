@@ -3,6 +3,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { createRide, getMyRides } from "../../lib/api/rideApi";
 import { queryClient } from "../../app/queryClient";
+import { getErrorMessage } from "../../lib/utils/error";
 import { useToastStore } from "../../store/toastStore";
 import {
   formatRideTimestamp,
@@ -79,10 +80,7 @@ export function CustomerDashboardPage() {
     onError: (error) => {
       pushToast({
         title: "Ride request failed",
-        description:
-          error?.response?.data?.message ||
-          error?.response?.data?.error ||
-          "Please retry in a moment.",
+        description: getErrorMessage(error, "Please retry in a moment."),
         tone: "danger"
       });
     }
@@ -202,11 +200,10 @@ export function CustomerDashboardPage() {
       {ridesQuery.isError ? (
         <EmptyState
           title="Ride history could not load"
-          description={
-            ridesQuery.error?.response?.data?.message ||
-            ridesQuery.error?.message ||
+          description={getErrorMessage(
+            ridesQuery.error,
             "The ride list request failed. Check the ride service and gateway."
-          }
+          )}
           action={
             <Button variant="secondary" onClick={() => ridesQuery.refetch()}>
               Retry ride fetch

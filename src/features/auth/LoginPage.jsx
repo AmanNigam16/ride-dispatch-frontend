@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { getMeWithToken, login } from "../../lib/api/authApi";
+import { getErrorMessage } from "../../lib/utils/error";
 import { useAuthStore } from "../../store/authStore";
 import { useToastStore } from "../../store/toastStore";
 import { Button } from "../../components/ui/Button";
@@ -54,9 +55,10 @@ export function LoginPage() {
       navigate(destination, { replace: true });
     } catch (submissionError) {
       setError(
-        submissionError?.response?.data?.message ||
-          submissionError?.response?.data?.error ||
+        getErrorMessage(
+          submissionError,
           "Unable to sign in. Please check your credentials."
+        )
       );
     } finally {
       setSubmitting(false);

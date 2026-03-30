@@ -7,6 +7,7 @@ import {
   updateRideStatus
 } from "../../lib/api/rideApi";
 import { queryClient } from "../../app/queryClient";
+import { getErrorMessage } from "../../lib/utils/error";
 import { useToastStore } from "../../store/toastStore";
 import {
   buildStatusAction,
@@ -109,10 +110,10 @@ export function DriverDashboardPage() {
     onError: (error) => {
       pushToast({
         title: "Could not accept ride",
-        description:
-          error?.response?.data?.message ||
-          error?.response?.data?.error ||
-          "Another driver may have taken it first.",
+        description: getErrorMessage(
+          error,
+          "Another driver may have taken it first."
+        ),
         tone: "danger"
       });
     }
@@ -236,11 +237,10 @@ export function DriverDashboardPage() {
         {availableRidesQuery.isError ? (
           <EmptyState
             title="Dispatch board could not load"
-            description={
-              availableRidesQuery.error?.response?.data?.message ||
-              availableRidesQuery.error?.message ||
+            description={getErrorMessage(
+              availableRidesQuery.error,
               "The driver ride list request failed. Check the gateway and ride service."
-            }
+            )}
             action={
               <Button variant="secondary" onClick={() => availableRidesQuery.refetch()}>
                 Retry dispatch fetch
