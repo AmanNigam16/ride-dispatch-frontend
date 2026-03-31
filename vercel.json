@@ -2,10 +2,14 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "http://100.53.155.50/api/:path*"
+      "destination": "http://98.80.217.4/api/:path*"
     },
     {
-      "source": "/:path*",
+      "source": "/socket.io/:path*",
+      "destination": "http://98.80.217.4/socket.io/:path*"
+    },
+    {
+      "source": "/((?!api/|socket.io/).*)",
       "destination": "/"
     }
   ]
