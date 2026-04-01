@@ -1,0 +1,16 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/auth/:path*",
+      "destination": "http://98.81.21.75/api/auth/:path*"
+    },
+    {
+      "source": "/api/rides/:path*",
+      "destination": "http://98.81.21.75/api/rides/:path*"
+    },
+    {
+      "source": "/socket.io/:path*",
+      "destination": "http://98.81.21.75/socket.io/:path*"
+    }
+  ]
+}
