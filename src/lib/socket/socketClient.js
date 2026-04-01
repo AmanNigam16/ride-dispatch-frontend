@@ -7,7 +7,7 @@ export function getSocket() {
   if (!socket) {
     socket = io(rideSocketUrl, {
       autoConnect: false,
-      transports: ["polling", "websocket"]
+      transports: ["polling"]
     });
   }
 
