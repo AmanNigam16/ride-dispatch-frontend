@@ -5,6 +5,13 @@ export const Input = forwardRef(function Input(
   { className, label, error, hint, ...props },
   ref
 ) {
+  const errorText =
+    typeof error === "string"
+      ? error
+      : error && typeof error === "object" && typeof error.message === "string"
+        ? error.message
+        : "";
+
   return (
     <label className="block space-y-2">
       {label ? (
@@ -14,13 +21,13 @@ export const Input = forwardRef(function Input(
         ref={ref}
         className={cn(
           "w-full rounded-[18px] border border-line bg-white px-4 py-3 text-sm outline-none transition placeholder:text-muted focus:border-brand-500 focus:ring-4 focus:ring-brand-100",
-          error && "border-danger focus:border-danger focus:ring-red-100",
+          errorText && "border-danger focus:border-danger focus:ring-red-100",
           className
         )}
         {...props}
       />
-      {error ? <span className="text-xs text-danger">{error}</span> : null}
-      {!error && hint ? <span className="text-xs text-muted">{hint}</span> : null}
+      {errorText ? <span className="text-xs text-danger">{errorText}</span> : null}
+      {!errorText && hint ? <span className="text-xs text-muted">{hint}</span> : null}
     </label>
   );
 });

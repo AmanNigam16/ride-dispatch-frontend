@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { getMeWithToken, login } from "../../lib/api/authApi";
+import { getApiErrorMessage } from "../../lib/api/getApiErrorMessage";
 import { useAuthStore } from "../../store/authStore";
 import { useToastStore } from "../../store/toastStore";
 import { Button } from "../../components/ui/Button";
@@ -53,11 +54,7 @@ export function LoginPage() {
       const destination = location.state?.from || getHomeRoute(authUser.role);
       navigate(destination, { replace: true });
     } catch (submissionError) {
-      setError(
-        submissionError?.response?.data?.message ||
-          submissionError?.response?.data?.error ||
-          "Unable to sign in. Please check your credentials."
-      );
+      setError(getApiErrorMessage(submissionError, "Unable to sign in. Please check your credentials."));
     } finally {
       setSubmitting(false);
     }

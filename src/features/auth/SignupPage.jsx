@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { getMeWithToken, login, signup } from "../../lib/api/authApi";
+import { getApiErrorMessage } from "../../lib/api/getApiErrorMessage";
 import { useAuthStore } from "../../store/authStore";
 import { useToastStore } from "../../store/toastStore";
 import { Button } from "../../components/ui/Button";
@@ -57,11 +58,7 @@ export function SignupPage() {
 
       navigate(getHomeRoute(authUser.role), { replace: true });
     } catch (submissionError) {
-      setError(
-        submissionError?.response?.data?.message ||
-          submissionError?.response?.data?.error ||
-          "Unable to create your account right now."
-      );
+      setError(getApiErrorMessage(submissionError, "Unable to create your account right now."));
     } finally {
       setSubmitting(false);
     }
