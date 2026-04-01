@@ -12,7 +12,8 @@ function safeOrigin(url, fallback) {
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
-  const gatewayOrigin = safeOrigin(env.VITE_RIDE_SOCKET_URL, "http://localhost:8080");
+  const apiOrigin = safeOrigin(env.VITE_API_BASE_URL, "http://localhost:8080");
+  const socketOrigin = safeOrigin(env.VITE_RIDE_SOCKET_URL, apiOrigin);
 
   return {
     plugins: [react()],
@@ -29,22 +30,14 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 5173,
       proxy: {
-        "/api/auth": {
-          target: gatewayOrigin,
-          changeOrigin: true
-        },
-        "/api/rides": {
-          target: gatewayOrigin,
+        "/api": {
+          target: apiOrigin,
           changeOrigin: true
         },
         "/socket.io": {
-          target: gatewayOrigin,
+          target: socketOrigin,
           changeOrigin: true,
           ws: true
-        },
-        "/api": {
-          target: gatewayOrigin,
-          changeOrigin: true
         }
       }
     }

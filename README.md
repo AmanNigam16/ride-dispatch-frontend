@@ -30,9 +30,8 @@ npm run dev
 ## Environment Variables
 
 ```env
-VITE_AUTH_API_BASE=/api/auth
-VITE_RIDE_API_BASE=/api/rides
-VITE_RIDE_SOCKET_URL=http://localhost:8080
+VITE_API_BASE_URL=/api
+VITE_RIDE_SOCKET_URL=
 VITE_MAPBOX_TOKEN=your_mapbox_public_token
 ```
 

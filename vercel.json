@@ -1,40 +1,20 @@
 {
   "rewrites": [
     {
-      "source": "/api/auth",
-      "destination": "http://98.81.21.75/api/auth"
-    },
-    {
-      "source": "/api/auth/",
-      "destination": "http://98.81.21.75/api/auth/"
-    },
-    {
-      "source": "/api/auth/:path*",
-      "destination": "http://98.81.21.75/api/auth/:path*"
-    },
-    {
-      "source": "/api/rides",
-      "destination": "http://98.81.21.75/api/rides"
-    },
-    {
-      "source": "/api/rides/",
-      "destination": "http://98.81.21.75/api/rides/"
-    },
-    {
-      "source": "/api/rides/:path*",
-      "destination": "http://98.81.21.75/api/rides/:path*"
+      "source": "/api/:path*",
+      "destination": "http://98.81.21.75/api/:path*"
     },
     {
       "source": "/socket.io",
       "destination": "http://98.81.21.75/socket.io"
     },
     {
-      "source": "/socket.io/",
-      "destination": "http://98.81.21.75/socket.io/"
-    },
-    {
       "source": "/socket.io/:path*",
       "destination": "http://98.81.21.75/socket.io/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
