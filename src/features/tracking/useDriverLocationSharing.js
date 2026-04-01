@@ -3,6 +3,8 @@ import { connectSocket } from "../../lib/socket/socketClient";
 import { useAuthStore } from "../../store/authStore";
 import { useTrackingStore } from "../../store/trackingStore";
 
+const activeRideStorageKey = "ride_dispatch_active_sharing_ride";
+
 export function useDriverLocationSharing(ride) {
   const user = useAuthStore((state) => state.user);
   const sharingState = useTrackingStore((state) => state.sharingState);
@@ -14,14 +16,35 @@ export function useDriverLocationSharing(ride) {
   const intervalRef = useRef(null);
   const [isSharing, setIsSharing] = useState(false);
 
+  function persistActiveRide(nextRideId) {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    if (nextRideId) {
+      window.sessionStorage.setItem(activeRideStorageKey, nextRideId);
+      return;
+    }
+
+    window.sessionStorage.removeItem(activeRideStorageKey);
+  }
+
   function stopSharing() {
     if (intervalRef.current) {
       window.clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
 
+    persistActiveRide(null);
     setIsSharing(false);
     setSharingState("idle");
+  }
+
+  function clearSharingTimer() {
+    if (intervalRef.current) {
+      window.clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
   }
 
   function publishLocation() {
@@ -76,9 +99,13 @@ export function useDriverLocationSharing(ride) {
 
     setSharingError("");
     setSharingState("requesting");
+    persistActiveRide(ride._id);
     setIsSharing(true);
     publishLocation();
-    intervalRef.current = window.setInterval(publishLocation, 5000);
+
+    if (!intervalRef.current) {
+      intervalRef.current = window.setInterval(publishLocation, 5000);
+    }
   }
 
   useEffect(() => {
@@ -88,8 +115,20 @@ export function useDriverLocationSharing(ride) {
   }, [isSharing, ride?.status]);
 
   useEffect(() => {
+    if (
+      typeof window !== "undefined" &&
+      ride?._id &&
+      ride.status !== "completed" &&
+      window.sessionStorage.getItem(activeRideStorageKey) === ride._id &&
+      !intervalRef.current
+    ) {
+      startSharing();
+    }
+  }, [ride?._id, ride?.status]);
+
+  useEffect(() => {
     return () => {
-      stopSharing();
+      clearSharingTimer();
     };
   }, []);
 
