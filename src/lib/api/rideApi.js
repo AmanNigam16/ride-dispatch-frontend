@@ -1,7 +1,7 @@
 import { rideHttp } from "./http";
 
 export async function createRide(payload) {
-  const response = await rideHttp.post("/", payload);
+  const response = await rideHttp.post("", payload);
   return response.data;
 }
 
