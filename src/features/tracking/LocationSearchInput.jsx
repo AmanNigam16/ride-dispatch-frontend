@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { hasMapboxToken, searchLocations } from "../../lib/maps/mapbox";
 import { Input } from "../../components/ui/Input";
 
@@ -12,9 +12,18 @@ export function LocationSearchInput({
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const selectedLabelRef = useRef("");
 
   useEffect(() => {
     let cancelled = false;
+
+    if (selectedLabelRef.current && value === selectedLabelRef.current) {
+      selectedLabelRef.current = "";
+      setResults([]);
+      setLoading(false);
+      setOpen(false);
+      return;
+    }
 
     if (!hasMapboxToken() || !value?.trim() || value.trim().length < 3) {
       setResults([]);
@@ -70,6 +79,8 @@ export function LocationSearchInput({
               className="block w-full rounded-2xl px-3 py-3 text-left text-sm transition hover:bg-surface-2"
               onMouseDown={(event) => {
                 event.preventDefault();
+                selectedLabelRef.current = result.label;
+                setResults([]);
                 onSelect(result);
                 setOpen(false);
               }}

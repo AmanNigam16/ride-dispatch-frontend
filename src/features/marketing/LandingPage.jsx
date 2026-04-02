@@ -18,7 +18,7 @@ export function LandingPage() {
         <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
           <section>
             <Badge tone="brand">Real-time dispatch + tracking</Badge>
-            <h1 className="mt-5 max-w-3xl font-display text-5xl font-semibold leading-tight text-app md:text-6xl">
+            <h1 className="mt-5 max-w-3xl font-display text-5xl font-semibold leading-tight text-white md:text-6xl">
               Book, assign, and track rides with a control room feel.
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-muted">
